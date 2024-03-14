@@ -3,11 +3,11 @@
 ### Tips 
  * Main branch covers all the latest updates on the project
 # Github Guideline : 
-Step 1 : Install Github Desktop for maintability
-Step 2 : Clone the Project && Connect your VisualStudio Code and your Github Desktop
-Step 3 : Create a New Branch on Github Desktop With a format of Example => (celine /TST-001) 
+- Step 1 : Install Github Desktop for maintability
+- Step 2 : Clone the Project && Connect your VisualStudio Code and your Github Desktop
+- Step 3 : Create a New Branch on Github Desktop With a format of Example => (celine /TST-001) 
 (TST Soruce Code for the Project Name, 0001 is the initial number of branch that've been created so far ) 
-Step 4 : Start Coding on Visual Studio Code
+- Step 4 : Start Coding on Visual Studio Code
 
 # For A BETTER Usage Of Github Check => READ & SEARCH THEESE 
 
