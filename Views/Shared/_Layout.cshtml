@@ -1,0 +1,77 @@
+﻿
+<!-- Burda cookieden kullanıcı giriş yaptıysa id ve isim ve agent olup olmadığı değişkenlere atılır -->
+@{
+    var cookies = Context.Request.Cookies;
+    var uid = Context.Session.GetString("UserID");
+    var uname = Context.Session.GetString("UserName") ?? "guest";
+    var utype = Context.Session.GetString("UserType") ?? "0";
+    var uApi = Context.Session.GetString("UserAPI");
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - G8CozyMVC</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/G8CozyMVC.styles.css" asp-append-version="true" />
+
+    <!-- diğer view sayfalarından [a]style{} içine yazılan kodlar buraya taşınılır -->
+    @RenderSection("Style", required: false)
+</head>
+<body style="margin:0">
+    <!-- navbar  -->
+    <header>
+        <nav class="topnav">
+            <div class="sidenaver">
+                @if (utype=="True")
+                {
+                    <a href="/">calendar</a>
+                    <a href="/">edit Profile</a>
+                } else
+                {
+                    <a href="/">Buy</a>
+                    <a href="/">Agent Finder</a>
+                    <a href="/">Add Property</a>
+                }
+            </div>
+            <div>
+                <a class="logo-link" href="/" style="width: 50px;">
+                    <img src="~/imgs/tripleEstate2.png" alt="g8rees" style="height:50px;">
+                </a>
+            </div>
+            <div class="sidenav">
+                <button class="notification" >
+                    🔔
+                    <span class="badge" id="num">!</span>
+                </button>
+                <!-- eğer uid yani kullanıcı id cookiede var olup olmadığnı belirtir -->
+                <a href="/users/create" style="margin: auto;"> @if (uid != null){<span>Log Out</span>}else{<span>Log in</span>}</a>
+                <p style="margin: auto;">@uname</p>
+            </div>
+        </nav>
+        <div id="noti" class="noti-act">
+            <div style="text-align:center"><h2>Nofitications</h2><hr /></div>
+            
+            <div>
+                <!-- ViewComponent/ViewComponent.cs dosyasından dbden çekilen notification mesajları alır -->
+                @await Component.InvokeAsync("Nofi")
+            </div>
+        </div>
+    </header>
+
+    <!-- diğer view sayfalarından gelen html kodları buraya yazılır -->
+    <div>
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

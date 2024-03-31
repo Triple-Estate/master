@@ -1,0 +1,61 @@
+﻿@model G8Cozy.Models.agent
+
+
+@section Style {
+    <style>
+        .col-sm-2{
+        font-weight: 1000;
+        padding: 10px;
+        font-family: fangsong;
+        }
+
+        .row{
+            display:grid;
+            grid-template-columns: 1fr  1fr;
+        }
+    </style>
+}
+
+@{
+    ViewData["Title"] = "Details";
+    string displayType;
+
+}
+
+<h1>Details</h1>
+<h4>agent</h4>
+<hr />
+
+<div>
+    <div class="row">
+        <div>
+            <img src="@Html.DisplayFor(model => model.Image)" width="100%" />
+        </div>
+        <div heigth:100vh;>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name):
+                @Html.DisplayFor(model => model.Name)
+                <br />
+                @Html.DisplayNameFor(model => model.Phone):
+                1+@Html.DisplayFor(model => model.Phone)
+                <br />
+                Experience:
+                @Html.DisplayFor(model => model.Xp) Years
+                <br />
+                @Html.DisplayNameFor(model => model.Type):
+                @Html.DisplayFor(model => model.Type)
+            </dt>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <div style="width:100%;height:30px;text-align:right">
+                <a asp-action="Index" style="text-decoration:none;color:#dde; border:3px solid #dde; background:#210; padding:10px;margin:10px; border-radius:18px;">Back to List =></a>
+            </div>
+        </div>
+       
+    </div>
+</div>
+

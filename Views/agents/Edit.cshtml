@@ -1,0 +1,119 @@
+﻿@model G8Cozy.Models.agent
+
+@{
+    ViewData["Title"] = "Edit";
+    var uApi = Context.Session.GetString("UserAPI");
+
+}
+@section Style {
+    <link rel="stylesheet" type="text/css" href="~/css/edit.css">
+}
+
+<!-- TODO add api edit/7 edit/14 musnt accsess with id 2 fix that or this is really importent -->
+
+<h1>Edit</h1>
+<h4>agent</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" class="headno">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <input type="file" id="imageInput" class="form-control" />
+                <input type="hidden" asp-for="Image" id="imageOutput" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+                <div id="imagePreview">
+                </div>
+            </div>
+            <div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="APIKEY" value="@uApi" />
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Phone" class="control-label"></label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Xp" class="control-label"></label>
+                    <input asp-for="Xp" class="form-control" />
+                    <span asp-validation-for="Xp" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Type" class="control-label"></label>
+                    <select asp-for="Type" class="search-input">
+                        <option value="">Any</option>
+                        <option value="buyeragent">Buyer's Agent</option>
+                        <option value="listingagent">Listing Agent</option>
+                        <option value="relocation">Relocation</option>
+                        <option value="shortsale">Short-Sale</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <span asp-validation-for="Type" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div style="width:100%;height:30px;text-align:right">
+    <a asp-action="Index" style="text-decoration:none;color:#dde; border:3px solid #dde; background:#210; padding:10px;margin:10px; border-radius:18px;">Back to List =></a>
+</div>
+<script>
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const _out = document.getElementById('imageOutput');
+
+    imageInput.addEventListener('change', handleImageUpload);
+
+    function handleImageUpload() {
+        imagePreview.innerHTML = '';
+
+        const files = imageInput.files;
+        if (files) {
+            for (const file of files) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.alt = 'Uploaded Image';
+                img.style.maxWidth = '100%';
+                img.style.height = 'auto';
+                imagePreview.appendChild(img);
+            }
+
+            // image converts to base64
+            const reader = new FileReader()
+            reader.onload = (e) => {
+                const b64 = e.target.result;
+                _out.value = b64;
+            }
+            reader.readAsDataURL(files[0])
+        }
+    }
+
+    // Notification
+    let popup = document.getElementById("popup");
+
+    function openPopupContact() {
+        popup.classList.add("open-popup");
+    }
+    function closePopupContact() { }
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,433 @@
+﻿@using G8Cozy.Models
+@model editabled
+
+
+@{
+    ViewData["Title"] = "Admin";
+    var index = 0;
+    List<home> l = Model.home.ToList();
+}
+
+@section Style {
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="~/css/admin.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="js/date.js" defer></script>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.css">
+
+    <script src="js/approvals.js" defer></script>
+}
+
+<button type="button" class="icon-button">
+    <span class="material-icons">notifications</span>
+    <span class="icon-button__badge">@l.Count</span>
+</button>
+<div class="container2">
+
+    <nav class="main-menu">
+        <div class="scrollbar" id="style-1">
+            <ul>
+                <li>
+                    <button onclick="toggleSection(0)" class="logo">
+                        <img src="../imgs/logo.png">
+                        <span class="nav-item">DashBoard</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="toggleSection(0)">
+                        <i class="fas fa-home"></i>
+                        <span class="nav-item">Home</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="toggleSection(1)">
+                        <i class="fas fa-user"></i>
+                        <span class="nav-item">Approvals</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="toggleSection(2)">
+                        <i class="fas fa-calendar"></i>
+                        <span class="nav-item">Date's</span>
+                    </button>
+                </li>
+
+                <li>
+                    <a href="/" class="logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="nav-item">Log out</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="pages">
+        <section class="main">
+            <div class="main-top" id="admin">
+                <h1 style="margin-left: 10px;">Welcome to Admin Panel</h1>
+            </div>
+            <div class="main-features">
+                <div class="card">
+                    <i class="fas fa-user"></i>
+                    <h3>Waiting Approvals</h3>
+                    <p>Join Over 1 million Students.</p>
+                    <button onclick="toggleSection(1)">View Details</button>
+                </div>
+
+                <div class="card">
+                    <i class="fas fa-calendar"></i>
+                    <h3>Visitor Date's</h3>
+                    <p>Join Over 2 million Students.</p>
+                    <button onclick="toggleSection(2)">View Details</button>
+                </div>
+            </div>
+
+            <section class="main-house">
+
+                <h1 style="margin-left: 15px;">Latest Listings</h1>
+                <div class="house-box">
+                    <div class="house">
+                        @foreach (var item in Model.home.Reverse())
+                        {
+                            @if (item != null)
+                            {
+                                <div class="box">
+                                    <h3 style="display:inline-block">@item.HomeType</h3>
+                                    <span style="float:right;font-weight:900; color:#b11">
+                                        @if (!item.HaveOnSiteParking)
+                                        {
+                                            <span>NEW !</span>
+                                        }
+                                    </span>
+                                    <img class="image-content" src="@item.Image">
+                                    <p>
+                                        @if (item.Description != null && item.Description.Length > 20)
+                                        {
+                                            <span id="truncatedText-@index">@item.Description.Substring(0, 20)</span>
+                                            <span id="points-@index">...</span>
+                                            <span id="moreText-@index" style="display: none;">@item.Description</span>
+                                        }
+                                        else
+                                        {
+                                            <span id="truncatedText-@index">@item.Description</span>
+                                        }
+                                    </p>
+                                    <button onclick="toggleText(@index)" id="textButton-@index">See more</button>
+                                </div>
+                            }
+                            index++;
+                        }
+                    </div>
+            </section>
+        </section>
+
+        <section>
+            <button type="button" class="icon-button">
+                <span class="material-icons">notifications</span>
+                <span class="icon-button__badge">2</span>
+            </button>
+            <p class="title"> Admin Approve Page</p>
+            <div class="adminer">
+                <div class="scrolling-wrapper" id="scrollwrap">
+                    @foreach (var item in Model.home.Reverse())
+                {
+                    @if (item != null && !item.HaveOnSiteParking)
+                    {
+                            <div class="card" data-id="@item.Id" data-uid="@item.YearBuilt">
+                            <div class="card-content">
+                                <p class="title-house">@item.HomeType</p>
+                                <img class="image-content" src="@item.Image">
+                                <p>@item.Description</p>
+                                @if (item.IsSell)
+                                {
+                                    <p>Price @item.Price$</p>
+                                }
+                                else
+                                {
+                                    <p>Price/for month @item.Price$</p>
+                                }
+                                <p>SqueareFeet @item.SquareFeet</p>
+                                <p>Owner @item.YearBuilt</p>
+                                <div>
+                                    <td>
+                                        @item.Room Rooms
+                                    </td>
+                                    <td>
+                                        @item.Bath Baths
+                                    </td>
+                                    </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <h4>Features</h4>
+                                    <div>
+                                        @if (item.HavePool)
+                                        {
+                                            <p>have Pool</p>
+                                        }
+                                        @if (item.HavePark)
+                                        {
+                                            <p>have Park</p>
+                                        }
+                                    </div>
+                                </div>
+                                    <div class="button-container">
+                                        <button class="accept-button" data-value="@item.Id">Accept</button>
+                                        <button class="reject-button" data-value="@item.Id">Reject</button>
+                                    </div>
+                            </div>
+                        </div>
+                    }
+                }
+                </div>
+            </div>
+
+            <div class="adminerwow">
+                <div class="footer-1">
+                    <p>Total Accepted: </p>
+                    <span id="accepted-count" class="form-control"></span>
+                </div>
+                <div class="footer-2">
+                    <p>Total Rejected: </p>
+                    <span id="rejected-count" class="form-control"></span>
+                </div>
+
+                <form asp-action="editabled" method="post">
+                    <input asp-for="Reject" type="hidden" id="newReject" />
+                    <input asp-for="Accept" type="hidden" id="newAccept" />
+
+                    <label>Password: </label>
+                    <input asp-for="Password" type="password" id="password" />
+                    <input type="submit" class="btn btn-primary" id="passwordbtn" value="Save" />
+                </form>
+            </div>
+        </section>
+
+        <section>
+            <div class="contianer">
+                <div class="calendar">
+                    <div class="calendar-header">
+                        <span class="month-picker" id="month-picker"> May </span>
+                        <div class="year-picker" id="year-picker">
+                            <span class="year-change" id="pre-year">
+                                <pre><</pre>
+                            </span>
+                            <span id="year">2020 </span>
+                            <span class="year-change" id="next-year">
+                                <pre>></pre>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="calendar-body">
+                        <div class="calendar-week-days">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+                        </div>
+                        <div class="calendar-days">
+                        </div>
+                    </div>
+                    <div class="calendar-footer">
+                    </div>
+                    <div class="date-time-formate">
+                        <div class="day-text-formate">TODAY</div>
+                        <div class="date-time-value">
+                            <div class="time-formate">02:51:20</div>
+                            <div class="date-formate">23 - july - 2022</div>
+                        </div>
+                    </div>
+                    <div class="month-list"></div>
+                </div>
+            </div>
+            <div id="appointmentModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2>Estate Appointment</h2>
+                    <label for="cityDropdown">Select a City: </label>
+                    <select id="cityDropdown">
+                    </select>
+                    <br>
+                    <label for="estateDropdown">Select a Estate to Visit:</label>
+                    <select id="estateDropdown">
+                    </select>
+                    <br>
+                    <label for="timeInput">Select Time:</label>
+                    <input type="time" id="timeInput" required>
+                    <br>
+                    <button onclick="submitAppointment()">Approve Appointment</button>
+                </div>
+            </div>
+            <div class="agents-section">
+                <h3>Agents Available for Visit</h3>
+                @foreach (var item in Model.agent)
+                {
+                    <div class="agent-card" onmouseover="hoverCard(this)" onmouseout="unhoverCard(this)">
+                        <img src="@item.Image">
+                        <div class="agent-details">
+                            <h4>@item.Name</h4>
+                            <p>Phone: +@item.Phone</p>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div id="vidata">
+                @foreach (var item in Model.agentuser)
+                {
+                    <div data-agent="@item.AgentId" data-user="@item.UserId" data-date="@item.Data"></div>
+                }
+            </div>
+        </section>
+    </div>
+</div>
+<script>
+    function getdb() {
+        const vidata = document.getElementById("vidata").children;
+        const cd = document.getElementsByClassName("calendar-days")[0].children;
+        let beg;
+        let dateObject;
+        for (let i = 0; i < cd.length; i++) {
+            if (cd[i].innerText === "1") {
+                beg = i-1;
+                break; // Once found, exit the loop
+            }
+        }
+
+        for (let i = 0; i < vidata.length; i++) {
+            let ds = vidata[i].getAttribute("data-date");
+            const parts = ds.split(' ');
+            // Parse date part
+            const dateParts = parts[0].split('.');
+            const year = parseInt(dateParts[2], 10);
+            const month = parseInt(dateParts[0], 10) - 1; // Month is zero-based
+            const day = parseInt(dateParts[1], 10);
+
+            // Parse time part
+            const timeParts = parts[1].split(':');
+            const hours = parseInt(timeParts[0], 10);
+            const minutes = parseInt(timeParts[1], 10);
+            const seconds = parseInt(timeParts[2], 10);
+
+            // Create a Date object
+            dateObject = new Date(year, month, day, hours, minutes, seconds);
+
+            cd[dateObject.getDay() + beg].classList.add("imp");
+        }
+
+    }
+
+
+    setTimeout(function () {
+        getdb()
+    }, 2000);
+
+
+    function hoverCard(e) { }
+    function unhoverCard(e) { }
+    function toggleText(elementId) {
+        let points = document.getElementById(`points-${elementId}`);
+        let showMoreText = document.getElementById(`moreText-${elementId}`);
+        let buttonText = document.getElementById(`textButton-${elementId}`);
+        console.log(points)
+        if (points.style.display === "none") {
+            showMoreText.style.display = "none";
+            points.style.display = "inline";
+            buttonText.innerHTML = "See More";
+        } else {
+            showMoreText.style.display = "inline";
+            points.style.display = "none";
+            buttonText.innerHTML = "See Less";
+        }
+    }
+
+    const pages = document.getElementById("pages").children;
+    function toggleSection(elementId) {
+        for (let i = 0; i < pages.length; i++) {
+            const element = pages[i];
+            element.classList.add("dipnone");
+        }
+        pages[elementId].classList.remove("dipnone")
+    }
+    toggleSection(0)
+    
+    const sw = document.getElementById("scrollwrap").children;
+    const accepted = document.getElementById("accepted-count");
+    const rejected = document.getElementById("rejected-count");
+    let accepted_c = 0;
+    let rejected_c = 0;
+    let set0 = ""
+    let set1 = ""
+    function stat(id, myd, myu, acc) {
+        if(acc==0){
+            let userInput = prompt("Continue? (just click ok or cancel)");
+            if (userInput === null) return;
+            
+            rejected_c += 1;
+            rejected.innerText = rejected_c;
+            set0 += (myd) + "`" + (myu) + "``";
+        }
+        else if(acc==1){
+
+            accepted_c += 1;
+            accepted.innerText = accepted_c;
+            set1 += (myd) + "`" + (myu) + "``";
+        }
+        
+        sw[id].classList.add("dipnone");
+    }
+
+    const reject = document.getElementsByClassName("reject-button");
+    const accept = document.getElementsByClassName("accept-button");
+    document.addEventListener('DOMContentLoaded', function () {
+        for (let i = 0; i < sw.length; i++) {
+            let myd = sw[i].getAttribute("data-id");
+            let myu = sw[i].getAttribute("data-uid");
+            
+            accept[i].onclick = () => stat(i, myd, myu, 1);
+            reject[i].onclick = () => stat(i, myd, myu, 0);
+        }
+    });
+
+    const pwbtn = document.getElementById("passwordbtn");
+    const newReject = document.getElementById("newReject");
+    const newAccept = document.getElementById("newAccept");
+    pwbtn.onclick = () => {
+        newAccept.value = set1;
+        newReject.value = set0;
+
+        /*
+        const pw = document.getElementById("password");
+        postData('editabled', { Accept: set1, Refund: set0, Password: pw.value })
+            .then(responseData => {
+                // Handle success response
+                console.log('Server response:', responseData);
+
+                // Add your logic based on the server response here
+                if (responseData.success) {
+                    // Redirect to another page or perform other actions
+                    window.location.href = '/success-page';
+                } else {
+                    // Handle unsuccessful response
+                    console.error('Server responded with an error:', responseData.error);
+                }
+            })
+            .catch(error => {
+                // Handle fetch error
+                console.error('Error:', error);
+            });*/
+    };
+    
+</script>
+
+<script src="~/js/date.js"></script>

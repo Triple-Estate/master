@@ -1,0 +1,161 @@
+﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+.noti-act{
+    display:none;
+}
+#noti {
+    background-color: #F1F1F1ed;
+    width: 400px;
+    backdrop-filter: brightness(0.5);
+    height: calc(100vh - 100px);
+    position: absolute;
+    right: 10px;
+    top: 65px;
+    padding:0 10px;
+    font-weight:700;
+    font-size:20px;
+}
+
+.sidenaver {
+    display: flex;
+    flex-direction: row;
+}
+.logo-img {
+    width: 110px;
+}
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: #e5e5e5;
+}
+
+nav {
+    background: rgb(179, 86, 110);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.logo-link img {
+    width: 80px;
+    font-weight: 350;
+}
+
+.sidenav {
+    display: grid;
+    grid-template-columns: 1fr 90px 10em;
+    font-family: 'PT Serif', serif;
+}
+
+.log {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+    .log a {
+        float: right;
+        text-transform: capitalize;
+    }
+
+.sidenav p{
+    color:#fff;
+}
+.topnav {
+    display: grid;
+    grid-template-columns: 1fr calc(50% - 300px) 400px;
+}
+.topnav a {
+    padding: 0 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-weight: 200;
+    text-decoration: none;
+}
+
+    .topnav a:hover {
+        background-color: darkgray;
+        color: black;
+    }
+
+.topnav-left {
+    float: right;
+}
+
+.filteringbar {
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.notification {
+    background-color: rgb(97, 46, 59);
+    width: 50px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    outline: none;
+}
+
+    .notification .badge {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background: rgb(219, 218, 218);
+        color: black;
+        margin-top: 13px;
+    }
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+a {
+    color: #0077cc;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}

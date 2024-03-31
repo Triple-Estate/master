@@ -1,0 +1,22 @@
+﻿@model IEnumerable<G8Cozy.Models.notification>
+
+@{
+    var cookies = Context.Request.Cookies;
+    var uid = Context.Session.GetString("UserID");
+
+}
+
+@if (Model != null && uid != null)
+{ 
+    @foreach (var notification in Model)
+    {
+        @if(notification.UserId == uid.ToString())
+        {
+            <p>Msg: @notification.Msg</p>
+        }
+    }
+}
+else
+{
+    <span>No notifications or not signed in</span>
+}

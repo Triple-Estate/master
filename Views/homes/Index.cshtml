@@ -1,0 +1,179 @@
+﻿@model IEnumerable<G8Cozy.Models.home>
+
+@{
+    ViewData["Title"] = "Index";
+    string displayType;
+    List<G8Cozy.Models.home> agentList = Model.ToList();
+}
+
+@section Style {
+    <link rel="stylesheet" href="~/css/agent.css">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="shttps://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.cs">
+
+    <style>
+        #root {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+            #root div {
+                width: 300px;
+            }
+
+        .img {
+        }
+
+            .img img {
+                width: 100%;
+            }
+
+        .non {
+            display: none;
+        }
+    </style>
+}
+
+<div class="content">
+    <div class="filters">
+        <div class="filter">
+            <div class="search-container">
+                <input type="text" id="search" name="search" placeholder="City,Neighborhood,ZIP,Address" class="search-input">
+            </div>
+        </div>
+
+        <div class="filter">
+            <div class="search-container">
+                <select id="specialties" name="specialties" placeholder="Any" class="search-input">
+                    <option value="-1">Any</option>
+                    <option value="<input checked=">For Sale</option>
+                    <option value="<input class=">For Rent</option>
+                </select>
+            </div>
+        </div>
+        <div class="filter">
+            <div class="search-container">
+                <input type="text" id="baths" placeholder="baths" class="search-input">
+            </div>
+        </div>
+
+        <div class="filter">
+            <div class="search-container">
+                <input type="text" id="Rooms" placeholder="Rooms" class="search-input">
+            </div>
+        </div>
+        <!--
+        <div class="filter">
+            <div class="search-container">
+                <select id="languages" name="languages" placeholder="Baths" class="search-input">
+                    <option value="any">any</option>
+                    <option value="Single-Family Home">Single-Family Home</option>
+                    <option value="Condo">Condo</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Duplex">Duplex</option>
+                    <option value="Tiny House">Tiny House</option>
+                </select>
+            </div>
+        </div>
+        -->
+        <div class="filter">
+            <div class="search-container">
+                <button class="search-button" id="btnsrc">Search</button>
+                <button class="search-button" id="btnsrcr">Reset</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+@if (Model != null && agentList.Count != 0) {
+    <div id="root">
+        @foreach (var item in Model)
+        {
+            @if (item.HaveOnSiteParking)
+            {
+                <div id="@item.Id" data-Bath="@Html.DisplayFor(modelItem => item.Bath)" data-Room="@Html.DisplayFor(modelItem => item.Room)" data-IsSell="@Html.DisplayFor(modelItem => item.IsSell)">
+                    <div class="img">
+                        <img src="@item.Image" class="img">
+                    </div>
+                    <p>
+                        HomeType:
+                        @Html.DisplayFor(modelItem => item.HomeType)
+                        <br />
+                            YearBuilt:
+                            1+@Html.DisplayFor(modelItem => item.YearBuilt)
+                        <br />
+                            Price:
+                            @Html.DisplayFor(modelItem => item.Price) Years
+                        <br />
+                            SquareFeet:
+                            @Html.DisplayFor(modelItem => item.SquareFeet)
+                        <br />
+                    </p>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </div>
+            }
+        }
+    </div>
+}
+
+else {
+    <div class="icon-container" style="padding-left:20px">
+        <svg style="width:143px; height:137px; Padding-right: 15px;" viewBox="0 0 143 137" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+            <circle cx="56.5" cy="56.5" r="51.5" stroke="#DE6767" stroke-width="10" />
+            <circle cx="57" cy="52" r="17" fill="#DE6767" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M87.6937 90.9853C79.4442 98.452 68.5032 103 56.5 103C45.1042 103 34.6659 98.9007 26.5792 92.0963C33.0378 81.8258 44.4718 75 57.5 75C70.0526 75 81.1252 81.3365 87.6937 90.9853Z"
+                    fill="#DE6767" />
+            <path d="M98 91.6465L137 130.646" stroke="#DE6767" stroke-width="12" stroke-linecap="round" />
+        </svg>
+        <div class="solid">
+            <p style="font-family: Georgia, 'Times New Roman', Times, serif; font-size:20px; color: rgb(111, 111, 111);"> <b>Find houses to buy in your area</b></p>
+            <p style="font-family: Georgia, 'Times New Roman', Times, serif; font-size:15px; color: rgb(111, 111, 111);">To get started, enter your location or <br> search for a specific agent by name.</p>
+        </div>
+    </div>
+}
+
+
+
+
+<script src="buy"></script>
+<script>
+
+    const root = document.getElementById("root");
+    const btnsrc = document.getElementById("btnsrc");
+    const btnsrcr = document.getElementById("btnsrcr");
+
+    const specialties = document.getElementById("specialties");
+    const baths = document.getElementById("baths");
+    const Rooms = document.getElementById("Rooms");
+
+    btnsrc.onclick = (e) => {
+        for (let i = 0; i < root.childElementCount; i++) {
+            const element = root.children[i];
+            let isSale = element.getAttribute("data-IsSell");
+            let room = element.getAttribute("data-Room");
+            let bath = element.getAttribute("data-Bath");
+
+
+            element.classList.remove("non");
+            console.log(isSale)
+            console.log(specialties.value)
+          
+            if (!(baths.value == bath || Rooms.value == room || (isSale == specialties.value))) {
+                element.classList.add("non");
+            }
+        }
+    }
+    btnsrcr.onclick=(e)=>{
+        for (let i = 0; i < root.childElementCount; i++) {
+            const element = root.children[i];
+            element.classList.remove("non");
+        }
+    }
+</script>
+

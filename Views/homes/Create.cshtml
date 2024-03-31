@@ -1,0 +1,253 @@
+﻿@model G8Cozy.Models.home
+
+@{
+    ViewData["Title"] = "Create";
+    var uid = Context.Session.GetString("UserID");
+    var uname = Context.Session.GetString("UserName");
+}
+
+@section Style{
+    <link rel="stylesheet" type="text/css" href="style/agent.css">
+
+    <style>
+        .img {
+            width: 8px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        div.solid {
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.334);
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .icon-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+            .icon-container svg {
+                margin-right: 15px;
+            }
+
+        .da {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin-left: 50px;
+            border: 1px solid rgb(179, 86, 110);
+            border-radius: 20px;
+            box-shadow: 0 0 10px #5f5f5f;
+        }
+
+            .da * {
+                gap: 20px;
+                margin: 10px
+            }
+
+        .popup {
+            height: 200px;
+            width: 400px;
+            background-color: #ffff;
+            border-radius: 6px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            text-align: center;
+            padding: 0 30px 30px;
+            color: #333;
+            visibility: hidden;
+            transition: transform 0.4s, top 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .open-popup {
+            visibility: visible;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .popup img {
+            width: 100px;
+            margin-top: 20px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .popup h2 {
+            font-size: 38px;
+            font-weight: 500;
+            margin: 30px 0 10px;
+        }
+
+        .popup button {
+            width: 40%;
+            padding: 15px 0;
+            background: #6fd649;
+            color: #fff;
+            border: 0;
+            outline: none;
+            font-size: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        
+        .head {
+            background: #e1d1a0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ins {
+            width: 200px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            text-transform: capitalize;
+        }
+
+    </style>
+    @if (uid != null)
+    {
+        <style>
+            .head{
+
+                background: transparent;
+             }
+
+            .headno{
+                height: calc(100vh - 250px);
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                padding: 100px;
+            }
+        </style>
+    }
+}
+<div class="head">
+    @if(uid!=null){
+        <form asp-action="Create" class="headno">
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input type="file" id="imageInput" style="text-decoration: none;  color: #dde;  border: 3px solid #dde;  background: #210;  padding: 10px;  margin: 10px;  border-radius: 18px;" />
+                <input type="hidden" asp-for="Image" id="imageOutput" class="form-control" />
+                <div id="imagePreview"></div>
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="HomeType" class="control-label">Location</label>
+                        <input asp-for="HomeType" class="form-control" />
+                        <span asp-validation-for="HomeType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SquareFeet" class="control-label"></label>
+                        <input asp-for="SquareFeet" class="form-control" />
+                        <span asp-validation-for="SquareFeet" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Room" class="control-label"></label>
+                        <input asp-for="Room" class="form-control" />
+                        <span asp-validation-for="Room" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Bath" class="control-label"></label>
+                        <input asp-for="Bath" class="form-control" />
+                        <span asp-validation-for="Bath" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsSell" /> @Html.DisplayNameFor(model => model.IsSell)
+                        </label>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="HavePool" /> @Html.DisplayNameFor(model => model.HavePool)
+                        </label>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="HavePark" /> @Html.DisplayNameFor(model => model.HavePark)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">password</label>
+                        <input asp-for="Keywords" class="form-control" />
+                        <input type="hidden" asp-for="YearBuilt" class="form-control" value="@uid @uname" />
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="ins">
+            <h2>please Login first</h2>
+        </div>
+    }
+    <div style="width:100%;height:30px;text-align:right">
+        <a asp-action="Index" style="text-decoration:none;color:#dde; border:3px solid #dde; background:#210; padding:10px;margin:10px; border-radius:18px;">Back to List =></a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const _out = document.getElementById('imageOutput');
+
+        imageInput.addEventListener('change', handleImageUpload);
+
+        function handleImageUpload() {
+            imagePreview.innerHTML = '';
+
+            const files = imageInput.files;
+            if (files) {
+                for (const file of files) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.alt = 'Uploaded Image';
+                    img.style.maxWidth = '100%';
+                    img.style.height = 'auto';
+                    imagePreview.appendChild(img);
+                }
+
+                // image converts to base64
+                const reader = new FileReader()
+                reader.onload = (e) => {
+                    const b64 = e.target.result;
+                    _out.value = b64;
+                }
+                reader.readAsDataURL(files[0])
+            }
+        }
+        
+        // Notification
+        let popup = document.getElementById("popup");
+
+        function openPopupContact() {
+            popup.classList.add("open-popup");
+        }
+        function closePopupContact() { }
+       
+    </script>
+}
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

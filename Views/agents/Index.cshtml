@@ -1,0 +1,186 @@
+﻿@using G8Cozy.Models
+@model G8Cozy.Models.useagent
+
+@{
+    ViewData["Title"] = "Index";
+    var uid = Context.Session.GetString("UserID");
+    var utype = Context.Session.GetString("UserType");
+    var uname = Context.Session.GetString("UserName");
+    string displayType;
+    List<G8Cozy.Models.agent> agentList = Model.agent.ToList();
+   
+}
+
+@section Style{
+    <link rel="stylesheet" href="~/css/agent.css">
+    <style>
+        #root{
+            display:flex;
+            flex-direction:row;
+            flex-wrap:wrap;
+        }
+
+        #root div {
+            width:300px;
+        }
+
+        .img{
+        }
+
+        .img img{
+            width:100%;
+        }
+        .non{
+            display:none;
+        }
+    </style>
+
+}
+<div class="content">
+    <div class="filters">
+        <div class="filter">
+               <input type="text" id="location" name="location" placeholder="Neighborhood/City" class="search-input">
+        </div>
+        <div class="filter">
+               <input type="text" id="agentName" name="agentName" placeholder="Agent Name" class="search-input">
+        </div>
+        <div class="filter">
+            <div class="search-container">
+                <select id="specialties" name="specialties" class="search-input">
+                    <option value="">Any</option>
+                    <option value="buyeragent">Buyer's Agent</option>
+                    <option value="listingagent">Listing Agent</option>
+                    <option value="relocation">Relocation</option>
+                    <option value="shortsale">Short-Sale</option>
+                    <option value="other">Other</option>
+                </select>
+                <button class="search-button" id="btnsrc">Search</button>
+                <button class="search-button" id="btnsrcr">Reset</button>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+@if (Model != null &&  agentList.Count != 0)
+    {
+    <div id="root">
+        @foreach (var item in Model.agent)
+        {
+            <div id="@item.Id" data-Name="@Html.DisplayFor(modelItem => item.Name)" data-Phone="@Html.DisplayFor(modelItem => item.Phone)" data-Type="@Html.DisplayFor(modelItem => item.Type)" >
+                <div class="img">
+                    <img src="@item.Image" class="img">
+                </div>
+                <p>
+                    Name:
+                    @Html.DisplayFor(modelItem => item.Name)
+                <br/>
+                    Phone:
+                    1+@Html.DisplayFor(modelItem => item.Phone)
+                <br />
+                    Experinece:
+                    @Html.DisplayFor(modelItem => item.Xp) Years
+                <br />
+                    Type:
+                    @{
+
+                        switch (item.Type)
+                        {
+                            case "buyeragent":
+                                displayType = "Buyer's Agent";
+                                break;
+                            case "listingagent":
+                                displayType = "Listing Agent";
+                                break;
+                            case "shortsale":
+                                displayType = "Short Sale";
+                                break;
+                            case "":
+                                displayType = "Any";
+                                break;
+                            default:
+                                displayType = item.Type;
+                                break;
+                        }
+                    }
+
+                    @Html.DisplayFor(modelItem => displayType)
+                </p>
+                    @if (uid == null)
+                    {
+                    <p>login first for appointment</p>
+                    }
+                    else if (utype == "True")
+                    {
+                        <p>login as not agent for appointment</p>
+                    }
+                    else
+                    {
+                        <form asp-action="userage" method="post">
+                            <input type="hidden" asp-for="AgentId" value="@item.Id">
+                            <input type="hidden" asp-for="UserId" value="@uid">
+                            <input type="hidden" asp-for="Phone" value="@item.Phone">
+                            <input type="date" asp-for="Data" />
+                            <input type="submit" value="Submit" />
+                        </form>
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+            </div>
+
+        }
+    </div>
+
+    }
+    else
+    {
+        <div class="icon-container" style="padding-left:20px">
+
+            <svg style="width:143px; height:137px; Padding-right: 15px;" viewBox="0 0 143 137" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+                <circle cx="56.5" cy="56.5" r="51.5" stroke="#DE6767" stroke-width="10" />
+                <circle cx="57" cy="52" r="17" fill="#DE6767" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M87.6937 90.9853C79.4442 98.452 68.5032 103 56.5 103C45.1042 103 34.6659 98.9007 26.5792 92.0963C33.0378 81.8258 44.4718 75 57.5 75C70.0526 75 81.1252 81.3365 87.6937 90.9853Z"
+                      fill="#DE6767" />
+                <path d="M98 91.6465L137 130.646" stroke="#DE6767" stroke-width="12" stroke-linecap="round" />
+            </svg>
+
+            <div class="solid">
+                <p style="font-family: Georgia, 'Times New Roman', Times, serif; font-size:20px; color: rgb(111, 111, 111);"> <b>Find agents in your area</b></p>
+                <p style="font-family: Georgia, 'Times New Roman', Times, serif; font-size:15px; color: rgb(111, 111, 111);">To get started, enter your location or <br> search for a specific agent by name.</p>
+            </div>
+
+        </div>
+    }
+
+<script>
+    const root = document.getElementById("root");
+    const btnsrc = document.getElementById("btnsrc");
+    const btnsrcr = document.getElementById("btnsrcr");
+    const agentName = document.getElementById("agentName");
+    const locationElement = document.getElementById("location");
+    const specialties = document.getElementById("specialties");
+
+    btnsrc.onclick = (e) => {
+        for (let i = 0; i < root.childElementCount; i++) {
+            const element = root.children[i];
+            let Name = element.getAttribute("data-Name");
+            let Phone = element.getAttribute("data-Phone");
+            let Type = element.getAttribute("data-Type");
+
+            element.classList.remove("non");
+            if (!(agentName.value == Name || specialties.value == Type)) {
+                element.classList.add("non");
+            }
+        }
+    }
+    btnsrcr.onclick = (e) => {
+        for (let i = 0; i < root.childElementCount; i++) {
+            const element = root.children[i];
+            element.classList.remove("non");
+        }
+    }
+    
+
+</script>

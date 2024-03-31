@@ -1,0 +1,65 @@
+﻿@model IEnumerable<G8Cozy.Models.agentuser>
+
+@{
+    ViewData["Title"] = "Index";
+    var uid = Context.Session.GetString("UserID");
+}
+
+        <div>
+            <ul>
+                <tr>
+                    <th>
+                                @Html.DisplayNameFor(model => model.UserId)
+                    </th>
+                    <th>
+                                @Html.DisplayNameFor(model => model.Data)
+                    </th>
+                    <th></th>
+                </tr>
+
+            </ul>
+            </thead>
+            @foreach (var item in Model) {
+        @item.status @item.AgentId
+        @if(uid == item.AgentId){<p>hel</p>}
+
+                if (uid == item.AgentId && (item.status == 0 || item.status == null) ) {
+                    <ul>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Data)
+                            </td>
+                            <td>
+                                <a asp-action="Accept" asp-route-id="@item.Id">Accept</a> |
+                                <a asp-action="Reject" asp-route-id="@item.Id">Reject</a>
+                            </td>
+                        </tr>
+                    </ul>
+                }
+            }
+        </div>
+        <div>
+            <hr />
+            <h2>Current appointments</h2>
+            @foreach (var item in Model)
+            {
+                if (uid == item.AgentId && item.status == 1)
+                {
+                    <ul>
+                        <tr>
+                            <td>
+                                    @Html.DisplayFor(modelItem => item.UserId)
+                            </td>
+                            <td>
+                                    @Html.DisplayFor(modelItem => item.Data)
+                            </td>
+                        </tr>
+                    </ul>
+                }
+            }
+        </div>
+
+
